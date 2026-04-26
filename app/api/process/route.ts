@@ -27,9 +27,18 @@ export async function POST(request: NextRequest) {
       case "psm":
         endpoint = `${PYTHON_BACKEND_URL}/psm`;
         break;
+      case "export-pdf":
+        endpoint = `${PYTHON_BACKEND_URL}/export/pdf`;
+        break;
+      case "export-docx":
+        endpoint = `${PYTHON_BACKEND_URL}/export/docx`;
+        break;
+      case "export-latex":
+        endpoint = `${PYTHON_BACKEND_URL}/export/latex`;
+        break;
       default:
         return NextResponse.json(
-          { error: "Invalid action. Expected: upload-preview, process, or psm." },
+          { error: "Invalid action. Expected: upload-preview, process, psm, or export-*." },
           { status: 400 }
         );
     }
@@ -55,6 +64,17 @@ export async function POST(request: NextRequest) {
         { error: errorData.detail || "Processing failed" },
         { status: backendResponse.status }
       );
+    }
+
+    if (action.startsWith("export-")) {
+      const buffer = await backendResponse.arrayBuffer();
+      const headers = new Headers();
+      headers.set("Content-Type", backendResponse.headers.get("Content-Type") || "application/octet-stream");
+      headers.set("Content-Disposition", backendResponse.headers.get("Content-Disposition") || "attachment");
+      return new NextResponse(buffer, {
+        status: backendResponse.status,
+        headers,
+      });
     }
 
     const result = await backendResponse.json();

@@ -34,8 +34,9 @@ export default function ExportBar({ tableData, backendUrl }: ExportBarProps) {
         const formData = new FormData();
         formData.append("table_data", JSON.stringify(tableData));
         formData.append("title", "Table 1");
+        formData.append("action", `export-${format}`);
 
-        const response = await fetch(`${backendUrl}/export/${format}`, {
+        const response = await fetch(`/api/process`, {
           method: "POST",
           body: formData,
         });

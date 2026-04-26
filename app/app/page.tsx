@@ -87,8 +87,9 @@ export default function AppPage() {
         // Upload to Python backend for preview
         const formData = new FormData();
         formData.append("file", selectedFile);
+        formData.append("action", "upload-preview");
 
-        const response = await fetch(`${PYTHON_BACKEND_URL}/upload-preview`, {
+        const response = await fetch(`/api/process`, {
           method: "POST",
           body: formData,
         });
@@ -181,8 +182,9 @@ export default function AppPage() {
         if (groupCol) {
           formData.append("group_col", groupCol);
         }
+        formData.append("action", "process");
 
-        const response = await fetch(`${PYTHON_BACKEND_URL}/process`, {
+        const response = await fetch(`/api/process`, {
           method: "POST",
           body: formData,
         });
