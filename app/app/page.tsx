@@ -97,7 +97,7 @@ export default function AppPage() {
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
           throw new Error(
-            errorData?.detail || `Upload failed (${response.status})`
+            errorData?.error || errorData?.detail || `Upload failed (${response.status})`
           );
         }
 
@@ -192,7 +192,7 @@ export default function AppPage() {
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
           throw new Error(
-            errorData?.detail || `Processing failed (${response.status})`
+            errorData?.error || errorData?.detail || `Processing failed (${response.status})`
           );
         }
 
